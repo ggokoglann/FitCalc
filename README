@@ -21,3 +21,5 @@ Currently i have done 6 calculators and there is 3 left.
 i am having some problems with auto layout but the learning process still goes and i will fix them. 
 
 03.06.2023 Auto Layout problems fixed.
+
+06.06.2023 Textfields was not shown when typing due to keyboard blocking it's view. Fixed this using flexible space.
