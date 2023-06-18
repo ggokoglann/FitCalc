@@ -24,6 +24,7 @@ class BFPViewController: UIViewController, UITextFieldDelegate {
     var nextTapped: Float = 0
     var activeTextField: UITextField?
     let toolbar = UIToolbar()
+    var bodyf: Float = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -96,77 +97,77 @@ class BFPViewController: UIViewController, UITextFieldDelegate {
         }
         return true
     }
-            
-    @IBAction func calculateBodyFat(_ sender: UIButton) {
+    
+    func calculation() {
         if let heightInput = height.text, let ageInput = age.text, let weightInput = weight.text,
-            let height = Float(heightInput), let age = Float(ageInput), let weight = Float(weightInput) {
-            
+           let height = Float(heightInput), let age = Float(ageInput), let weight = Float(weightInput) {
             if maleOrFemale.selectedSegmentIndex == 0 {
                 
                 let bmi = 10000 * (weight / (height * height))
                 let bodyFat = 1.2 * bmi + 0.23 * age - 16.2
+                bodyf = bodyFat
                 
-                let bodyFatString = String(format: "%.2f", bodyFat)
-                let bodyFatPrefix = bodyFatString.prefix(4)
-                
-                BodyFatLabel.text = "Body Fat : %\(bodyFatPrefix)"
-                
-                animate(sender)
-                
-                bfpResult = bodyFat
-                switch bfpResult {
-                case 2..<6:
-                    reaction.text = "Congratulations! Your body fat percentage falls within the essential fat category. Essential fat is necessary for various physiological functions. Keep up the good work!"
-                case 6..<14:
-                    reaction.text = "Great job! Your body fat percentage is in the athlete category. This level of body fat is often associated with optimal performance and fitness. Keep up the hard work and maintain your healthy lifestyle!"
-                case 14..<18:
-                    reaction.text = "Excellent! Your body fat percentage falls within the fitness category. This level of body fat is considered healthy and indicates good fitness levels. Keep up your exercise routine and balanced diet to maintain your fitness goals!"
-                case 18..<24:
-                    reaction.text = "Good job! Your body fat percentage falls within the average category. This level of body fat is considered typical for men of your age and is generally associated with good health. Keep maintaining a balanced lifestyle!"
-                case 24..<100:
-                    reaction.text = "It appears that your body fat percentage falls within the obese category. It's important to focus on your health and well-being. Consider consulting a healthcare professional or a fitness expert to develop a plan to improve your body composition and overall health."
-                default:
-                    reaction.text = "Please enter valid values for height and weight."
-                }
-                
-                reaction.numberOfLines = 0
-                reaction.sizeToFit()
-                                
             } else if maleOrFemale.selectedSegmentIndex == 1 {
-                                                
+                
                 let bmi = 10000 * (weight / (height * height))
                 let bodyFat = 1.2 * bmi + 0.23 * age - 5.4
-                
-                let bodyFatString = String(format: "%.2f", bodyFat)
-                let bodyFatPrefix = bodyFatString.prefix(4)
-                
-                BodyFatLabel.text = "Body Fat : %\(bodyFatPrefix)"
-                
-                animate(sender)
-                
-                bfpResult = bodyFat
-                switch bfpResult {
-                case 2..<6:
-                    reaction.text = "Congratulations! Your body fat percentage falls within the essential fat category. Essential fat is crucial for maintaining reproductive and hormonal health. Well done!"
-                case 6..<14:
-                    reaction.text = "Well done! Your body fat percentage is in the athlete category. This level of body fat is commonly seen in athletes and indicates a high level of fitness. Keep pushing your boundaries and stay active!"
-                case 14..<18:
-                    reaction.text = "Fantastic! Your body fat percentage falls within the fitness category. This level of body fat is associated with a healthy and fit lifestyle. Keep up your fitness regimen and enjoy the benefits of an active lifestyle!"
-                case 18..<24:
-                    reaction.text = "Well done! Your body fat percentage falls within the average category. This level of body fat is commonly observed in women of your age and is generally associated with good health. Continue your healthy habits!"
-                case 24..<100:
-                    reaction.text = "It seems that your body fat percentage falls within the obese category. Prioritizing your health and well-being is essential. We recommend seeking guidance from a healthcare professional or a fitness expert to develop a plan for improving your body composition and overall health."
-                default:
-                    reaction.text = "Please enter valid values for height and weight."
-                }
-                              
-                reaction.numberOfLines = 0
-                reaction.sizeToFit()
+                bodyf = bodyFat
                 
             } else {
                 print("Please enter valid values for height, age and weight.")
             }
-        }        
+        }
+    }
+    
+    func reaction(_ bodyf: Float) {
+        let bodyFatString = String(format: "%.2f", bodyf)
+        let bodyFatPrefix = bodyFatString.prefix(4)
+        BodyFatLabel.text = "Body Fat : %\(bodyFatPrefix)"        
+            
+        if maleOrFemale.selectedSegmentIndex == 0 {
+                // Male Reactions
+            switch bodyf {
+            case 2..<6:
+                reaction.text = "Congratulations! Your body fat percentage falls within the essential fat category. Essential fat is necessary for various physiological functions. Keep up the good work!"
+            case 6..<14:
+                reaction.text = "Great job! Your body fat percentage is in the athlete category. This level of body fat is often associated with optimal performance and fitness. Keep up the hard work and maintain your healthy lifestyle!"
+            case 14..<18:
+                reaction.text = "Excellent! Your body fat percentage falls within the fitness category. This level of body fat is considered healthy and indicates good fitness levels. Keep up your exercise routine and balanced diet to maintain your fitness goals!"
+            case 18..<24:
+                reaction.text = "Good job! Your body fat percentage falls within the average category. This level of body fat is considered typical for men of your age and is generally associated with good health. Keep maintaining a balanced lifestyle!"
+            case 24..<100:
+                reaction.text = "It appears that your body fat percentage falls within the obese category. It's important to focus on your health and well-being. Consider consulting a healthcare professional or a fitness expert to develop a plan to improve your body composition and overall health."
+            default:
+                reaction.text = "Please enter valid values for height and weight."
+            }
+            reaction.numberOfLines = 0
+            reaction.sizeToFit()
+            
+        } else if maleOrFemale.selectedSegmentIndex == 1 {
+                // Female Reactions
+            switch bodyf {
+            case 2..<6:
+                reaction.text = "Congratulations! Your body fat percentage falls within the essential fat category. Essential fat is crucial for maintaining reproductive and hormonal health. Well done!"
+            case 6..<14:
+                reaction.text = "Well done! Your body fat percentage is in the athlete category. This level of body fat is commonly seen in athletes and indicates a high level of fitness. Keep pushing your boundaries and stay active!"
+            case 14..<18:
+                reaction.text = "Fantastic! Your body fat percentage falls within the fitness category. This level of body fat is associated with a healthy and fit lifestyle. Keep up your fitness regimen and enjoy the benefits of an active lifestyle!"
+            case 18..<24:
+                reaction.text = "Well done! Your body fat percentage falls within the average category. This level of body fat is commonly observed in women of your age and is generally associated with good health. Continue your healthy habits!"
+            case 24..<100:
+                reaction.text = "It seems that your body fat percentage falls within the obese category. Prioritizing your health and well-being is essential. We recommend seeking guidance from a healthcare professional or a fitness expert to develop a plan for improving your body composition and overall health."
+            default:
+                reaction.text = "Please enter valid values for height and weight."
+            }
+            reaction.numberOfLines = 0
+            reaction.sizeToFit()
+        }
+    }
+        
+    @IBAction func calculateBodyFat(_ sender: UIButton) {
+        calculation()                                       // Calculation
+        reaction(bodyf)                                     // Reaction based on result
+        animate(sender)                                     // Animation
     }
     
     @objc func keyboardWillShow(_ notification: Notification) {

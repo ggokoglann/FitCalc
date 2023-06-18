@@ -95,42 +95,32 @@ class ORMViewController: UIViewController, UITextFieldDelegate{
     @IBAction func calculateORM(_ sender: UIButton) {
         if let repInput = rep.text {
             switch repInput {
-            case "1":
+            case "1":               // using user's rep input as leverage for calculation using switch case
                 formula(1)
-                animate(sender)
             case "2":
                 formula(1.03)
-                animate(sender)
             case "3":
                 formula(1.06)
-                animate(sender)
             case "4":
                 formula(1.09)
-                animate(sender)
             case "5":
                 formula(1.13)
-                animate(sender)
             case "6":
                 formula(1.16)
-                animate(sender)
             case "7":
                 formula(1.20)
-                animate(sender)
             case "8":
                 formula(1.24)
-                animate(sender)
             case "9":
                 formula(1.29)
-                animate(sender)
             case "10":
                 formula(1.33)
-                animate(sender)
             default:
                 ormReaction.text = "Rep count must be between 1 to 10"
                 ormReaction.font = UIFont(name: "HelveticaNeue-Light", size: 26)
-                animate(sender)
                 break
             }
+            animate(sender)
         }
     }
     

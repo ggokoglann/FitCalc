@@ -21,6 +21,7 @@ class IWCViewController: UIViewController, UITextFieldDelegate {
     var selection: Bool?
     var activeTextField: UITextField?
     let toolbar = UIToolbar()
+    var ideal: Float = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -83,41 +84,39 @@ class IWCViewController: UIViewController, UITextFieldDelegate {
         return true
     }
     
-    @IBAction func Calculate(_ sender: UIButton) {
+    func calculation() {
         if let heightInput = height.text, let height = Float(heightInput) {
-            
             if maleOrFemale.selectedSegmentIndex == 0 {
+                    // Ideal weight formula for male
                 let idealWeight = 52 + (((height - 152) / 2.54) * 1.9)
-                
-                let iwString = String(format: "%.2f", idealWeight)
-                let iwPrefix = iwString.prefix(4)
-                
-                IWCLabel.text = "Your Ideal Weight: \(iwPrefix) Kg"
-                IWCLabel.font = UIFont(name: "HelveticaNeue-Light", size: 24)
-                
-                animate(sender)
-                
-                iwcReaction.text = "Based on the information you provided, your estimated ideal weight is \(iwPrefix) kilograms. Please note that this is a general calculation, and individual factors may vary. It's always recommended to consult with a healthcare professional for personalized guidance on maintaining a healthy weight and lifestyle."
-                iwcReaction.font = UIFont(name: "HelveticaNeue-Light", size: 20)
+                ideal = idealWeight
                 
             } else if maleOrFemale.selectedSegmentIndex == 1 {
+                    // Ideal weight formula for female
                 let idealWeight = 49 + (((height - 152) / 2.54) * 1.7)
-                
-                let iwString = String(format: "%.2f", idealWeight)
-                let iwPrefix = iwString.prefix(4)
-                
-                IWCLabel.text = "Your Ideal Weight: \(iwPrefix) Kg"
-                IWCLabel.font = UIFont(name: "HelveticaNeue-Light", size: 24)
-                
-                animate(sender)
-                
-                iwcReaction.text = "Based on the information you provided, your estimated ideal weight is \(iwPrefix) kilograms. Please note that this is a general calculation, and individual factors may vary. It's always recommended to consult with a healthcare professional for personalized guidance on maintaining a healthy weight and lifestyle."
-                iwcReaction.font = UIFont(name: "HelveticaNeue-Light", size: 20)
+                ideal = idealWeight
                 
             } else {
                 print("Please pick your gender and enter valid values for height and age.")
             }
         }
+    }
+    
+    func reaction(_ ideal: Float) {
+        let iwString = String(format: "%.2f", ideal)
+        let iwPrefix = iwString.prefix(4)
+        
+        IWCLabel.text = "Your Ideal Weight: \(iwPrefix) Kg"
+        IWCLabel.font = UIFont(name: "HelveticaNeue-Light", size: 24)
+        
+        iwcReaction.text = "Based on the information you provided, your estimated ideal weight is \(iwPrefix) kilograms. Please note that this is a general calculation, and individual factors may vary. It's always recommended to consult with a healthcare professional for personalized guidance on maintaining a healthy weight and lifestyle."
+        iwcReaction.font = UIFont(name: "HelveticaNeue-Light", size: 20)
+    }
+    
+    @IBAction func Calculate(_ sender: UIButton) {
+        calculation()
+        reaction(ideal)
+        animate(sender)
     }
     
     @objc func keyboardWillShow(_ notification: Notification) {

@@ -19,6 +19,7 @@ class BMIViewController: UIViewController, UITextFieldDelegate {
     var bmiResult: Float = 0
     var activeTextField: UITextField?
     let toolbar = UIToolbar()
+    var resultbmi : Float = 0
                        
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -81,42 +82,42 @@ class BMIViewController: UIViewController, UITextFieldDelegate {
             return true
         }
     
-    @IBAction func calculateBegin(_ sender: UIButton) {
+    func calculation() {
         if let heightInput = height.text, let weigthInput = weight.text,
-               let height = Float(heightInput), let weight = Float(weigthInput) {
-                
-                let bmi1 = 10000 * (weight / (height * height))
-                        
-                let bmiString = String(format: "%.2f", bmi1)
-                let bmiPrefix = bmiString.prefix(4)
-                            
-                bmiResult = bmi1
-                switch bmiResult {
-                case 0..<18.5:
-                    bmiReaction.text = "Underweight: If your BMI is in the underweight category, it's important to focus on gaining weight in a healthy way. You can try increasing your calorie intake and incorporating strength training exercises to build muscle mass."
-                case 18.5..<24.9:
-                    bmiReaction.text = "Normal weight: Congratulations! Your BMI is in the normal range, which means you're at a healthy weight for your height. Keep up the good work by maintaining a healthy diet and staying active."
-                case 24.9..<29.9:
-                    bmiReaction.text = "Overweight: If your BMI is in the overweight category, it's important to focus on losing weight in a healthy way. You can try reducing your calorie intake, increasing your physical activity, and incorporating more fruits and vegetables into your diet."
-                case 29.9..<34.9:
-                    bmiReaction.text = "Obese: If your BMI is in the obese category, it's important to focus on losing weight in a healthy way. You may want to consult with a healthcare provider or registered dietitian to develop a personalized plan for weight loss."
-                case 34.9..<100:
-                    bmiReaction.text = "Extremely obese: If your BMI is in the extremely obese category, it's important to seek medical help to manage your weight. You may be at higher risk for health problems such as heart disease, diabetes, and high blood pressure. A healthcare provider or registered dietitian can help you develop a plan to achieve a healthy weight."
-                default:
-                    bmiReaction.text = "Please enter valid values for height and weight."
-                }
-                    // Switch case showing user the advice texts depending on results they get
-                    
-                bmiReaction.numberOfLines = 0
-                bmiReaction.sizeToFit()
+           let height = Float(heightInput), let weight = Float(weigthInput) {
             
-                result.text = "Your Bmi: \(bmiPrefix)"
-            
-                animate(sender)
-                                        
-                } else {
-            print("Please enter valid values for height and weight.")
+            let bmi1 = 10000 * (weight / (height * height))
+            resultbmi = bmi1
         }
+    }
+    
+    func reaction(_ resultbmi: Float) {
+        let bmiString = String(format: "%.2f", resultbmi)
+        let bmiPrefix = bmiString.prefix(4)
+        result.text = "Your Bmi: \(bmiPrefix)"
+        
+        switch resultbmi {
+        case 0..<18.5:
+            bmiReaction.text = "Underweight: If your BMI is in the underweight category, it's important to focus on gaining weight in a healthy way. You can try increasing your calorie intake and incorporating strength training exercises to build muscle mass."
+        case 18.5..<24.9:
+            bmiReaction.text = "Normal weight: Congratulations! Your BMI is in the normal range, which means you're at a healthy weight for your height. Keep up the good work by maintaining a healthy diet and staying active."
+        case 24.9..<29.9:
+            bmiReaction.text = "Overweight: If your BMI is in the overweight category, it's important to focus on losing weight in a healthy way. You can try reducing your calorie intake, increasing your physical activity, and incorporating more fruits and vegetables into your diet."
+        case 29.9..<34.9:
+            bmiReaction.text = "Obese: If your BMI is in the obese category, it's important to focus on losing weight in a healthy way. You may want to consult with a healthcare provider or registered dietitian to develop a personalized plan for weight loss."
+        case 34.9..<100:
+            bmiReaction.text = "Extremely obese: If your BMI is in the extremely obese category, it's important to seek medical help to manage your weight. You may be at higher risk for health problems such as heart disease, diabetes, and high blood pressure. A healthcare provider or registered dietitian can help you develop a plan to achieve a healthy weight."
+        default:
+            bmiReaction.text = "Please enter valid values for height and weight."
+        }
+        bmiReaction.numberOfLines = 0
+        bmiReaction.sizeToFit()
+    }
+    
+    @IBAction func calculateBegin(_ sender: UIButton) {
+        calculation()                                    // Calculation
+        reaction(resultbmi)                              // Reaction based on result
+        animate(sender)                                  // Animation
     }
     
     @objc func keyboardWillShow(_ notification: Notification) {

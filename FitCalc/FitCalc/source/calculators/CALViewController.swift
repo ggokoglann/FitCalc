@@ -26,6 +26,7 @@ class CALViewController: UIViewController, UIPickerViewDelegate, UITextFieldDele
     var nextTapped: Float = 0
     var activeTextField: UITextField?
     let toolbar = UIToolbar()
+    var calorie: Float = 0
     
     let options = ["Pick Activity Level", "Little/no exercise", "Exercise 1-2 times/week", "Exercise 2-3 times/week", "Exercise 3-5 times/week", "Exercise 6-7 times/week", "Proffesional Athlete"]
         
@@ -123,129 +124,81 @@ class CALViewController: UIViewController, UIPickerViewDelegate, UITextFieldDele
             print("selected row: \(selectedOption)")
         }
     
-    @IBAction func calculateCAL(_ sender: UIButton) {
+    func formula(_ result: Float) {
+        let calString = String(format: "%.2f", result)
+        let calPrefix = calString.prefix(4)
+        calReaction.text = "Your Daily Calorie Intake : \(calPrefix) kcal/day"
+    }
+    
+    func reaction(_ cal1: Float) {
+        if maleOrFemale.selectedSegmentIndex == 0 {
+            // Male reactions
+        switch selectedOption {
+        case "Pick Activity Level":
+            calReaction.text = "Please Pick Activity Level"
+        case "Little/no exercise":
+            formula(cal1 + 300)
+        case "Exercise 1-2 times/week":
+            formula(cal1 + 600)
+        case "Exercise 2-3 times/week":
+            formula(cal1 + 900)
+        case "Exercise 3-5 times/week":
+            formula(cal1 + 1200)
+        case "Exercise 6-7 times/week":
+            formula(cal1 + 1500)
+        case "Proffesional Athlete":
+            formula(cal1 + 2000)
+        default:
+            break
+        }
+    } else if maleOrFemale.selectedSegmentIndex == 1 {
+            // Female reactions
+        switch selectedOption {
+        case "Pick Activity Level":
+            calReaction.text = "Please Pick Activity Level"
+        case "Little/no exercise":
+            formula(cal1 + 200)
+        case "Exercise 1-2 times/week":
+            formula(cal1 + 400)
+        case "Exercise 2-3 times/week":
+            formula(cal1 + 600)
+        case "Exercise 3-5 times/week":
+            formula(cal1 + 800)
+        case "Exercise 6-7 times/week":
+            formula(cal1 + 1000)
+        case "Proffesional Athlete":
+            formula(cal1 + 1200)
+        default:
+            break
+            }
+        }
+    }
+    
+    func calculation() {
         if let ageInput = age.text, let weightInput = weight.text, let heightInput = height.text,
            let age = Float(ageInput), let weight = Float(weightInput), let height = Float(heightInput) {
             
             if maleOrFemale.selectedSegmentIndex == 0 {
-
+                    // Calorie intake formula for male
                 let cal1 = (weight * 10) + (height * 6.25) - (age * 5) + 5
+                calorie = cal1
                 
-                switch selectedOption {
-                case "Pick Activity Level":
-                    calReaction.text = "Please Pick Activity Level"
-                    animate(sender)
-                    
-                case "Little/no exercise":
-                    let cal2 = cal1 + 300
-                    let calString = String(format: "%.2f", cal2)
-                    let calPrefix = calString.prefix(4)
-                    calReaction.text = "Your Daily Calorie Intake : \(calPrefix) kcal/day"
-                    animate(sender)
-                                                                
-                case "Exercise 1-2 times/week":
-                    let cal2 = cal1 + 600
-                    let calString = String(format: "%.2f", cal2)
-                    let calPrefix = calString.prefix(4)
-                    calReaction.text = "Your Daily Calorie Intake : \(calPrefix) kcal/day"
-                    animate(sender)
-                                                        
-                case "Exercise 2-3 times/week":
-                    let cal2 = cal1 + 900
-                    let calString = String(format: "%.2f", cal2)
-                    let calPrefix = calString.prefix(4)
-                    calReaction.text = "Your Daily Calorie Intake : \(calPrefix) kcal/day"
-                    animate(sender)
-                                                            
-                case "Exercise 3-5 times/week":
-                    let cal2 = cal1 + 1200
-                    let calString = String(format: "%.2f", cal2)
-                    let calPrefix = calString.prefix(4)
-                    calReaction.text = "Your Daily Calorie Intake : \(calPrefix) kcal/day"
-                    animate(sender)
-                                                            
-                case "Exercise 6-7 times/week":
-                    let cal2 = cal1 + 1500
-                    let calString = String(format: "%.2f", cal2)
-                    let calPrefix = calString.prefix(4)
-                    calReaction.text = "Your Daily Calorie Intake : \(calPrefix) kcal/day"
-                    animate(sender)
-                                                            
-                case "Proffesional Athlete":
-                    let cal2 = cal1 + 2000
-                    let calString = String(format: "%.2f", cal2)
-                    let calPrefix = calString.prefix(4)
-                    calReaction.text = "Your Daily Calorie Intake : \(calPrefix) kcal/day"
-                    animate(sender)
-                                                            
-                default:
-                    animate(sender)
-                    break
-                }
-                    
-                } else if maleOrFemale.selectedSegmentIndex == 1 {
-                    
-                    let cal1 = (weight * 10) + (height * 6.25) - (age * 5) - 161
-                    
-                    switch selectedOption {
-                    case "Pick Activity Level":
-                        calReaction.text = "Please Pick Activity Level"
-                        animate(sender)
-                        
-                    case "Little/no exercise":
-                        let cal2 = cal1 + 200
-                        let calString = String(format: "%.2f", cal2)
-                        let calPrefix = calString.prefix(4)
-                        calReaction.text = "Your Daily Calorie Intake : \(calPrefix) kcal/day"
-                        animate(sender)
-                        
-                    case "Exercise 1-2 times/week":
-                        let cal2 = cal1 + 400
-                        let calString = String(format: "%.2f", cal2)
-                        let calPrefix = calString.prefix(4)
-                        calReaction.text = "Your Daily Calorie Intake : \(calPrefix) kcal/day"
-                        animate(sender)
-                                            
-                    case "Exercise 2-3 times/week":
-                        let cal2 = cal1 + 600
-                        let calString = String(format: "%.2f", cal2)
-                        let calPrefix = calString.prefix(4)
-                        calReaction.text = "Your Daily Calorie Intake : \(calPrefix) kcal/day"
-                        animate(sender)
-                                            
-                    case "Exercise 3-5 times/week":
-                        let cal2 = cal1 + 800
-                        let calString = String(format: "%.2f", cal2)
-                        let calPrefix = calString.prefix(4)
-                        calReaction.text = "Your Daily Calorie Intake : \(calPrefix) kcal/day"
-                        animate(sender)
-                                            
-                    case "Exercise 6-7 times/week":
-                        let cal2 = cal1 + 1000
-                        let calString = String(format: "%.2f", cal2)
-                        let calPrefix = calString.prefix(4)
-                        calReaction.text = "Your Daily Calorie Intake : \(calPrefix) kcal/day"
-                        animate(sender)
-                                            
-                    case "Proffesional Athlete":
-                        let cal2 = cal1 + 1200
-                        let calString = String(format: "%.2f", cal2)
-                        let calPrefix = calString.prefix(4)
-                        calReaction.text = "Your Daily Calorie Intake : \(calPrefix) kcal/day"
-                        animate(sender)
-                                            
-                    default:
-                        animate(sender)
-                        break
-                    }
-                } else {
-                    calLabel.text = "Calorie Calculator"
-                    calLabel.font = UIFont(name: "HelveticaNeue-Light", size: 32)
-                    calReaction.text = "Please enter valid values for height, age and weight."
-                    animate(sender)
-                }
+            } else if maleOrFemale.selectedSegmentIndex == 1 {
+                    // Calorie intake formula for female
+                let cal1 = (weight * 10) + (height * 6.25) - (age * 5) - 161
+                calorie = cal1
+                
+            } else {
+                calReaction.text = "Please enter valid values for height, age and weight."
             }
         }
+    }
+    
+    @IBAction func calculateCAL(_ sender: UIButton) {
+        calculation()                                    // Calculation
+        reaction(calorie)                                // Reaction based on result
+        animate(sender)                                  // Animation
+    }
     
     @objc func keyboardWillShow(_ notification: Notification) {
         guard let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else {

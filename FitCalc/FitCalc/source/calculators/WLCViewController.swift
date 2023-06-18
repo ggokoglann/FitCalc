@@ -26,6 +26,7 @@ class WLCViewController: UIViewController, UIPickerViewDelegate, UITextFieldDele
     var nextTapped: Float = 0
     var activeTextField: UITextField?
     let toolbar = UIToolbar()
+    var calorie: Float = 0
     
     let options = ["Pick Activity Level", "Little/no exercise", "Exercise 1-2 times/week", "Exercise 2-3 times/week", "Exercise 3-5 times/week", "Exercise 6-7 times/week", "Proffesional Athlete"]
     
@@ -114,129 +115,91 @@ class WLCViewController: UIViewController, UIPickerViewDelegate, UITextFieldDele
             print("selected row: \(selectedOption)")
             // Handle the selected option
         }
-
-    @IBAction func calculateWLC(_ sender: UIButton) {
+        
+    func formula(_ result: Float) {
+        let calString = String(format: "%.2f", result)
+        let calPrefix = calString.prefix(4)
+        WLCReaction.text = "Your Daily Calorie Intake For Weight Loss : \(calPrefix) kcal/day"
+    }
+    
+    func calculation() {
         if let ageInput = age.text, let weightInput = weight.text, let heightInput = height.text,
            let age = Float(ageInput), let weight = Float(weightInput), let height = Float(heightInput) {
             
             if maleOrFemale.selectedSegmentIndex == 0 {
-
-                let cal1 = (weight * 10) + (height * 6.25) - (age * 5) + 5
                 
-                switch selectedOption {
-                case "Pick Activity Level":
-                    WLCReaction.text = "Please Pick Activity Level"
-                    animate(sender)
-                    
-                case "Little/no exercise":
-                    let cal2 = cal1 - 250
-                    let calString = String(format: "%.2f", cal2)
-                    let calPrefix = calString.prefix(4)
-                    WLCReaction.text = "Your Daily Calorie Intake For Weight Loss : \(calPrefix) kcal/day"
-                    animate(sender)
-                    
-                case "Exercise 1-2 times/week":
-                    let cal2 = cal1
-                    let calString = String(format: "%.2f", cal2)
-                    let calPrefix = calString.prefix(4)
-                    WLCReaction.text = "Your Daily Calorie Intake For Weight Loss : \(calPrefix) kcal/day"
-                    animate(sender)
-                    
-                case "Exercise 2-3 times/week":
-                    let cal2 = cal1 + 300
-                    let calString = String(format: "%.2f", cal2)
-                    let calPrefix = calString.prefix(4)
-                    WLCReaction.text = "Your Daily Calorie Intake For Weight Loss : \(calPrefix) kcal/day"
-                    animate(sender)
-                    
-                case "Exercise 3-5 times/week":
-                    let cal2 = cal1 + 550
-                    let calString = String(format: "%.2f", cal2)
-                    let calPrefix = calString.prefix(4)
-                    WLCReaction.text = "Your Daily Calorie Intake For Weight Loss : \(calPrefix) kcal/day"
-                    animate(sender)
-                    
-                case "Exercise 6-7 times/week":
-                    let cal2 = cal1 + 800
-                    let calString = String(format: "%.2f", cal2)
-                    let calPrefix = calString.prefix(4)
-                    WLCReaction.text = "Your Daily Calorie Intake For Weight Loss : \(calPrefix) kcal/day"
-                    animate(sender)
-                    
-                case "Proffesional Athlete":
-                    let cal2 = cal1 + 1150
-                    let calString = String(format: "%.2f", cal2)
-                    let calPrefix = calString.prefix(4)
-                    WLCReaction.text = "Your Daily Calorie Intake For Weight Loss : \(calPrefix) kcal/day"
-                    animate(sender)
-                    
-                default:
-                    animate(sender)
-                    break
-                }
-                    
-                } else if maleOrFemale.selectedSegmentIndex == 1 {
-                    
-                    let cal1 = (weight * 10) + (height * 6.25) - (age * 5) - 161
-                    
-                    switch selectedOption {
-                    case "Pick Activity Level":
-                        WLCReaction.text = "Please Pick Activity Level"
-                        animate(sender)
-                        
-                    case "Little/no exercise":
-                        let cal2 = cal1 - 250
-                        let calString = String(format: "%.2f", cal2)
-                        let calPrefix = calString.prefix(4)
-                        WLCReaction.text = "Your Daily Calorie Intake For Weight Loss : \(calPrefix) kcal/day"
-                        animate(sender)
-                        
-                    case "Exercise 1-2 times/week":
-                        let cal2 = cal1
-                        let calString = String(format: "%.2f", cal2)
-                        let calPrefix = calString.prefix(4)
-                        WLCReaction.text = "Your Daily Calorie Intake For Weight Loss : \(calPrefix) kcal/day"
-                        animate(sender)
-                        
-                    case "Exercise 2-3 times/week":
-                        let cal2 = cal1 + 250
-                        let calString = String(format: "%.2f", cal2)
-                        let calPrefix = calString.prefix(4)
-                        WLCReaction.text = "Your Daily Calorie Intake For Weight Loss : \(calPrefix) kcal/day"
-                        animate(sender)
-                        
-                    case "Exercise 3-5 times/week":
-                        let cal2 = cal1 + 450
-                        let calString = String(format: "%.2f", cal2)
-                        let calPrefix = calString.prefix(4)
-                        WLCReaction.text = "Your Daily Calorie Intake For Weight Loss : \(calPrefix) kcal/day"
-                        animate(sender)
-                        
-                    case "Exercise 6-7 times/week":
-                        let cal2 = cal1 + 600
-                        let calString = String(format: "%.2f", cal2)
-                        let calPrefix = calString.prefix(4)
-                        WLCReaction.text = "Your Daily Calorie Intake For Weight Loss : \(calPrefix) kcal/day"
-                        animate(sender)
-                        
-                    case "Proffesional Athlete":
-                        let cal2 = cal1 + 800
-                        let calString = String(format: "%.2f", cal2)
-                        let calPrefix = calString.prefix(4)
-                        WLCReaction.text = "Your Daily Calorie Intake For Weight Loss : \(calPrefix) kcal/day"
-                        animate(sender)
-                        
-                    default:
-                        animate(sender)
-                        break
-                    }
-                } else {
-                    WLCLabel.text = "Calorie Calculator"
-                    WLCLabel.font = UIFont(name: "HelveticaNeue-Light", size: 32)
-                    WLCReaction.text = "Please enter valid values for height, age and weight."
-                    animate(sender)
-                }
+                let cal1 = (weight * 10) + (height * 6.25) - (age * 5) + 5
+                calorie = cal1
+                
+            } else if maleOrFemale.selectedSegmentIndex == 1 {
+                
+                let cal1 = (weight * 10) + (height * 6.25) - (age * 5) - 161
+                calorie = cal1
+                
+            } else {
+                WLCReaction.text = "Please enter valid values for height, age and weight."
             }
+        }
+    }
+    
+    func reaction(_ calorie: Float) {
+        if maleOrFemale.selectedSegmentIndex == 0 {
+                // Male reactions
+            switch selectedOption {
+            case "Pick Activity Level":
+                WLCReaction.text = "Please Pick Activity Level"
+            case "Little/no exercise":
+                formula(calorie - 250)
+            case "Exercise 1-2 times/week":
+                formula(calorie)
+            case "Exercise 2-3 times/week":
+                formula(calorie + 300)
+            case "Exercise 3-5 times/week":
+                formula(calorie + 550)
+            case "Exercise 6-7 times/week":
+                formula(calorie + 800)
+            case "Proffesional Athlete":
+                formula(calorie + 1150)
+            default:
+                break
+            }
+        } else if maleOrFemale.selectedSegmentIndex == 1 {
+                // Female reactions
+            switch selectedOption {
+            case "Pick Activity Level":
+                WLCReaction.text = "Please Pick Activity Level"
+            case "Little/no exercise":
+                formula(calorie - 250)
+            case "Exercise 1-2 times/week":
+                formula(calorie)
+            case "Exercise 2-3 times/week":
+                formula(calorie + 250)
+            case "Exercise 3-5 times/week":
+                formula(calorie + 450)
+            case "Exercise 6-7 times/week":
+                formula(calorie + 600)
+            case "Proffesional Athlete":
+                formula(calorie + 800)
+            default:
+                break
+            }
+        }
+    }
+    
+    func animate(_ sender: UIButton) {
+        UIView.animate(withDuration: 0.2, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.7, options: [], animations: {
+            sender.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
+            }, completion: { (_) in
+                UIView.animate(withDuration: 0.3) {
+                    sender.transform = .identity
+            }
+        })
+    }
+    
+    @IBAction func calculateWLC(_ sender: UIButton) {
+        calculation()                                   // Calculation
+        reaction(calorie)                               // Reaction based on result
+        animate(sender)                                 // Animation
     }
     
     @objc func keyboardWillShow(_ notification: Notification) {
@@ -294,13 +257,4 @@ class WLCViewController: UIViewController, UIPickerViewDelegate, UITextFieldDele
         weight.resignFirstResponder()
     }
     
-    func animate(_ sender: UIButton) {
-        UIView.animate(withDuration: 0.2, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.7, options: [], animations: {
-            sender.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
-            }, completion: { (_) in
-                UIView.animate(withDuration: 0.3) {
-                    sender.transform = .identity
-            }
-        })
-    }
 }

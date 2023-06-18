@@ -24,6 +24,7 @@ class BMRViewController: UIViewController, UITextFieldDelegate {
     var nextTapped: Float = 0
     var activeTextField: UITextField?    
     let toolbar = UIToolbar()
+    var result: Float = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -97,44 +98,43 @@ class BMRViewController: UIViewController, UITextFieldDelegate {
         return true
     }
     
-    @IBAction func calculateBMR(_ sender: UIButton) {
+    func calculation() {
         if let ageInput = age.text, let weightInput = weight.text, let heightInput = height.text,
            let age = Float(ageInput), let weight = Float(weightInput), let height = Float(heightInput) {
             
             if maleOrFemale.selectedSegmentIndex == 0 {
+                    // BMR Calculation formula for male
                 let bmr1 = (weight * 10) + (height * 6.25) - (age * 5) + 5
-                
-                let bmrString = String(format: "%.2f", bmr1)
-                let bmrPrefix = bmrString.prefix(4)
-                
-                BMRLabel.text = "Your Bmr: \(bmrPrefix) kcal/day"
-                BMRLabel.font = UIFont(name: "HelveticaNeue-Light", size: 26)
-                
-                animate(sender)
-                
-                bmrReaction.text = "Your Basal Metabolic Rate (BMR) is the number of calories your body burns at rest. Based on your input, your BMR is calculated to be \(bmrPrefix) kcal/day. This means that your body burns approximately \(bmrPrefix) calories per day even if you don't move at all.Knowing your BMR is helpful for creating a nutrition and exercise plan that supports your goals, whether you're looking to lose weight, gain weight, or maintain your current weight. By adjusting your daily caloric intake and exercise regimen based on your BMR, you can achieve your desired outcome."
-                bmrReaction.font = UIFont(name: "HelveticaNeue-Light", size: 18)
-                bmrReaction.numberOfLines = 0
-                bmrReaction.sizeToFit()
+                result = bmr1
                 
             } else if maleOrFemale.selectedSegmentIndex == 1 {
+                    // BMR Calculation formula for female
                 let bmr1 = (weight * 10) + (height * 6.25) - (age * 5) - 161
-                
-                let bmrString = String(format: "%.2f", bmr1)
-                let bmrPrefix = bmrString.prefix(4)
-                
-                BMRLabel.text = "Your Bmr: \(bmrPrefix) kcal/day"                    
-                
-                animate(sender)
-                
-                bmrReaction.text = "Your Basal Metabolic Rate (BMR) is the number of calories your body burns at rest. Based on your input, your BMR is calculated to be \(bmrPrefix) kcal/day. This means that your body burns approximately \(bmrPrefix) calories per day even if you don't move at all.Knowing your BMR is helpful for creating a nutrition and exercise plan that supports your goals, whether you're looking to lose weight, gain weight, or maintain your current weight. By adjusting your daily caloric intake and exercise regimen based on your BMR, you can achieve your desired outcome."
-                bmrReaction.numberOfLines = 0
-                bmrReaction.sizeToFit()
+                result = bmr1
                 
             } else {
                 print("Please enter valid values for height, age and weight.")
             }
         }
+    }
+    
+    func reaction(_ result: Float) {
+        let bmrString = String(format: "%.2f", result)
+        let bmrPrefix = bmrString.prefix(4)
+        
+        BMRLabel.text = "Your Bmr: \(bmrPrefix) kcal/day"
+        BMRLabel.font = UIFont(name: "HelveticaNeue-Light", size: 26)
+                
+        bmrReaction.text = "Your Basal Metabolic Rate (BMR) is the number of calories your body burns at rest. Based on your input, your BMR is calculated to be \(bmrPrefix) kcal/day. This means that your body burns approximately \(bmrPrefix) calories per day even if you don't move at all.Knowing your BMR is helpful for creating a nutrition and exercise plan that supports your goals, whether you're looking to lose weight, gain weight, or maintain your current weight. By adjusting your daily caloric intake and exercise regimen based on your BMR, you can achieve your desired outcome."
+        bmrReaction.font = UIFont(name: "HelveticaNeue-Light", size: 18)
+        bmrReaction.numberOfLines = 0
+        bmrReaction.sizeToFit()
+    }
+      
+    @IBAction func calculateBMR(_ sender: UIButton) {
+        calculation()                                   // Calculation
+        reaction(result)                                // Reaction based on result
+        animate(sender)                                 // Animation
     }
     
     @objc func keyboardWillShow(_ notification: Notification) {

@@ -19,6 +19,7 @@ class WCCViewController: UIViewController, UITextFieldDelegate {
     var walkResult: Float = 0
     var activeTextField: UITextField?
     let toolbar = UIToolbar()
+    var calorie: Float = 0
         
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -80,23 +81,40 @@ class WCCViewController: UIViewController, UITextFieldDelegate {
         }
         return true
     }
-
-    @IBAction func calculateWCC(_ sender: UIButton) {
+    
+    func formula() {
         if let durationInput = duration.text, let bodyWeightInput = bodyWeight.text,
-        let duration = Float(durationInput), let bodyWeight = Float(bodyWeightInput) {
+           let duration = Float(durationInput), let bodyWeight = Float(bodyWeightInput) {
             
             let walkCalorie = (duration * 12.5 * bodyWeight) / 200
-            
-            let walkString = String(format: "%.2f", walkCalorie)
-            let walkPrefix = walkString.prefix(4)
-                        
-            walkReaction.text = "Your Burned \(walkPrefix) Calories"
-            walkReaction.font = UIFont(name: "HelveticaNeue-Light", size: 26)
-            walkReaction.numberOfLines = 0
-            walkReaction.sizeToFit()
-            
-            animate(sender)
+            calorie = walkCalorie
         }
+    }
+    
+    func reaction(_ calorie: Float) {
+        let walkString = String(format: "%.2f", calorie)
+        let walkPrefix = walkString.prefix(4)
+                    
+        walkReaction.text = "Your Burned \(walkPrefix) Calories"
+        walkReaction.font = UIFont(name: "HelveticaNeue-Light", size: 26)
+        walkReaction.numberOfLines = 0
+        walkReaction.sizeToFit()
+    }
+    
+    func animate(_ sender: UIButton) {
+        UIView.animate(withDuration: 0.2, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.7, options: [], animations: {
+            sender.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
+            }, completion: { (_) in
+                UIView.animate(withDuration: 0.3) {
+                    sender.transform = .identity
+            }
+        })
+    }
+
+    @IBAction func calculateWCC(_ sender: UIButton) {
+        formula()                                       // Calculation
+        reaction(calorie)                               // Reaction based on result
+        animate(sender)                                 // Animation
     }
     
     @objc func keyboardWillShow(_ notification: Notification) {
@@ -131,15 +149,5 @@ class WCCViewController: UIViewController, UITextFieldDelegate {
     }
     @objc func doneButtonTapped() {
         duration.resignFirstResponder()
-    }
-    
-    func animate(_ sender: UIButton) {
-        UIView.animate(withDuration: 0.2, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.7, options: [], animations: {
-            sender.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
-            }, completion: { (_) in
-                UIView.animate(withDuration: 0.3) {
-                    sender.transform = .identity
-            }
-        })
-    }
+    }       
 }
