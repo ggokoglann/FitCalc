@@ -32,3 +32,5 @@ i am having some problems with auto layout but the learning process still goes a
 18.06.2023 Learning about SOLID principles and i am trying to use them on my project as much as i can and the first principle is single resposibility. in the old version of my code
 the calculator function was doing every thing starting from chechking the user inputs to calculation to reaction.
 but today i made the changes and after now every event has its own function such as = verification - calculation - reaction - animation
+
+01.07.2023 Today was a big day i made the last changes to the app and fixed few bugs and today i started my developer program for this year and made the submit for this app.
